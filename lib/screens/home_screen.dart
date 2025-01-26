@@ -12,10 +12,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeTab(),
-    ShipperListScreen(),
-    ProfileScreen(),
+  final List<Widget> _screens = [
+    const HomeTab(),
+    const ShipperListScreen(
+      departureCountry: '',
+      destinationCountry: '',
+    ),
+    const ProfileScreen(),
   ];
 
   @override
@@ -51,8 +54,73 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
+
+  @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  String? departureCountry;
+  String? destinationCountry;
+
+  // Liste des pays et territoires
+  final List<String> countries = [
+    // France métropolitaine et DOM-TOM
+    'France',
+    'Guadeloupe',
+    'Martinique',
+    'Guyane française',
+    'La Réunion',
+    'Mayotte',
+    'Saint-Martin',
+    'Saint-Barthélemy',
+    'Saint-Pierre-et-Miquelon',
+    'Nouvelle-Calédonie',
+    'Polynésie française',
+    
+    // Amérique du Nord
+    'Canada',
+    'États-Unis',
+    
+    // Afrique de l'Ouest
+    'Bénin',
+    'Burkina Faso',
+    'Cap-Vert',
+    'Côte d\'Ivoire',
+    'Gambie',
+    'Ghana',
+    'Guinée',
+    'Guinée-Bissau',
+    'Liberia',
+    'Mali',
+    'Mauritanie',
+    'Niger',
+    'Nigeria',
+    'Sénégal',
+    'Sierra Leone',
+    'Togo',
+    
+    // Autres pays d'Afrique
+    'Cameroun',
+    'République démocratique du Congo',
+    'Gabon',
+    'Madagascar',
+    'Maroc',
+    'Tunisie',
+    
+    // Europe
+    'Allemagne',
+    'Belgique',
+    'Espagne',
+    'Italie',
+    'Luxembourg',
+    'Pays-Bas',
+    'Portugal',
+    'Royaume-Uni',
+    'Suisse',
+  ]..sort(); // Trie la liste par ordre alphabétique
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +144,18 @@ class HomeTab extends StatelessWidget {
                 background: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      'assets/images/logistics_banner.jpg',
-                      fit: BoxFit.cover,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
+                          ],
+                        ),
+                      ),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -160,42 +237,70 @@ class HomeTab extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: 24),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Pays de départ',
-                                  prefixIcon: const Icon(Icons.flight_takeoff, color: Colors.white70),
-                                  labelStyle: const TextStyle(color: Colors.white70),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: Colors.white),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white.withOpacity(0.1),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                  color: Colors.white.withOpacity(0.1),
                                 ),
-                                style: const TextStyle(color: Colors.white),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: departureCountry,
+                                    hint: const Text(
+                                      'Pays de départ',
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    isExpanded: true,
+                                    icon: const Icon(Icons.flight_takeoff, color: Colors.white70),
+                                    dropdownColor: Theme.of(context).colorScheme.primary,
+                                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                                    items: countries.map((String country) {
+                                      return DropdownMenuItem<String>(
+                                        value: country,
+                                        child: Text(country),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        departureCountry = newValue;
+                                      });
+                                    },
+                                  ),
+                                ),
                               ),
                               const SizedBox(height: 16),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Pays de destination',
-                                  prefixIcon: const Icon(Icons.flight_land, color: Colors.white70),
-                                  labelStyle: const TextStyle(color: Colors.white70),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: Colors.white),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white.withOpacity(0.1),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.white.withOpacity(0.3)),
+                                  color: Colors.white.withOpacity(0.1),
                                 ),
-                                style: const TextStyle(color: Colors.white),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: destinationCountry,
+                                    hint: const Text(
+                                      'Pays de destination',
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    isExpanded: true,
+                                    icon: const Icon(Icons.flight_land, color: Colors.white70),
+                                    dropdownColor: Theme.of(context).colorScheme.primary,
+                                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                                    items: countries.map((String country) {
+                                      return DropdownMenuItem<String>(
+                                        value: country,
+                                        child: Text(country),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        destinationCountry = newValue;
+                                      });
+                                    },
+                                  ),
+                                ),
                               ),
                               const SizedBox(height: 24),
                               Container(
@@ -219,7 +324,28 @@ class HomeTab extends StatelessWidget {
                                   ],
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (departureCountry == null || destinationCountry == null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Veuillez sélectionner les pays de départ et de destination'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    
+                                    // Navigation vers la liste des transporteurs avec les paramètres
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ShipperListScreen(
+                                          departureCountry: departureCountry!,
+                                          destinationCountry: destinationCountry!,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     foregroundColor: Colors.white,
@@ -251,23 +377,20 @@ class HomeTab extends StatelessWidget {
                           _buildServiceCard(
                             context,
                             'Transport maritime',
-                            'assets/images/maritime.jpg',
-                            Icons.directions_boat,
                             const [Color(0xFF1E3D59), Color(0xFF2E5C88)],
+                            Icons.directions_boat,
                           ),
                           _buildServiceCard(
                             context,
                             'Transport aérien',
-                            'assets/images/air.jpg',
-                            Icons.airplanemode_active,
                             const [Color(0xFF2E5C88), Color(0xFF4A78B0)],
+                            Icons.airplanemode_active,
                           ),
                           _buildServiceCard(
                             context,
                             'Transport routier',
-                            'assets/images/road.jpg',
-                            Icons.local_shipping,
                             const [Color(0xFF4A78B0), Color(0xFF6A98D0)],
+                            Icons.local_shipping,
                           ),
                         ],
                       ),
@@ -282,7 +405,7 @@ class HomeTab extends StatelessWidget {
     );
   }
 
-  Widget _buildServiceCard(BuildContext context, String title, String imagePath, IconData icon, List<Color> gradientColors) {
+  Widget _buildServiceCard(BuildContext context, String title, List<Color> gradientColors, IconData icon) {
     return Container(
       width: 160,
       margin: const EdgeInsets.only(right: 16),
@@ -291,11 +414,14 @@ class HomeTab extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: gradientColors,
+                ),
               ),
             ),
             Container(
