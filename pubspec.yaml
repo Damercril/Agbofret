@@ -1,0 +1,41 @@
+name: agbofret
+description: Application de mise en relation entre expéditeurs et transporteurs internationaux
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  google_fonts: ^5.1.0
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+  intl: ^0.18.1
+  flutter_rating_bar: ^4.0.1
+  cached_network_image: ^3.3.0
+  flutter_map: ^6.0.1
+  latlong2: ^0.9.0
+  image_picker: ^1.0.4
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
+  firebase_storage: ^11.5.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/logistics_banner.jpg
+    - assets/images/maritime.jpg
+    - assets/images/air.jpg
+    - assets/images/road.jpg
